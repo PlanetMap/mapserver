@@ -974,7 +974,8 @@ int msWMSLoadGetMapParams(mapObj *map, int nVersion,
     } else if ((strcasecmp(names[i], "SRS") == 0 && nVersion < OWS_1_3_0) ||
                (strcasecmp(names[i], "CRS") == 0 && nVersion >= OWS_1_3_0)) {
       srsfound = 1;
-      /* SRS is in format "EPSG:epsg_id" or "AUTO:proj_id,unit_id,lon0,lat0" */
+      /* SRS is in format "EPSG:epsg_id", "IAU2000:iau2000_id" or
+         "AUTO:proj_id,unit_id,lon0,lat0" */
       if (strncasecmp(values[i], "EPSG:", 5) == 0) {
         /* SRS=EPSG:xxxx */
 
@@ -1007,6 +1008,8 @@ int msWMSLoadGetMapParams(mapObj *map, int nVersion,
         if (iUnits != -1)
           map->units = iUnits;
         */
+      } else if (strncasecmp(values[i], "IAU2000:", 8) == 0) {
+        snprintf(srsbuffer, sizeof(srsbuffer), "%s",  values[i]);
       } else if (strncasecmp(values[i], "AUTO:", 5) == 0 && nVersion < OWS_1_3_0) {
         snprintf(srsbuffer, sizeof(srsbuffer), "%s",  values[i]);
         /* SRS=AUTO:proj_id,unit_id,lon0,lat0 */
@@ -1024,7 +1027,7 @@ int msWMSLoadGetMapParams(mapObj *map, int nVersion,
       } else {
         if (nVersion >= OWS_1_3_0) {
           msSetError(MS_WMSERR,
-                     "Unsupported CRS namespace (only EPSG, AUTO2, CRS currently supported).",
+                     "Unsupported CRS namespace (only EPSG, IAU2000, AUTO2, CRS currently supported).",
                      "msWMSLoadGetMapParams()");
           return msWMSException(map, nVersion, "InvalidCRS", wms_exception_format);
         } else {
