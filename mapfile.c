@@ -1561,6 +1561,13 @@ int msLoadProjectionString(projectionObj *p, const char *value)
     p->args = (char**)msSmallMalloc(sizeof(char*));
     p->args[0] = msStrdup(value);
     p->numargs = 1;
+  } else if (strncasecmp(value, "IAU2000:", 8) == 0) {
+    size_t buffer_size;
+    buffer_size = strlen(value) + 7;
+    p->args = (char**)msSmallMalloc(sizeof(char*));
+    p->args[0] = (char*)msSmallMalloc(buffer_size);
+    snprintf(p->args[0], buffer_size, "+init=iau2000:%s", value+8);
+    p->numargs = 1;
   } else if (msLoadProjectionStringEPSGLike(p, value, "EPSG:", MS_FALSE) == 0 ) {
    /* Assume lon/lat ordering. Use msLoadProjectionStringEPSG() if wanting to follow EPSG axis */
   } else if (msLoadProjectionStringEPSGLike(p, value, "urn:ogc:def:crs:EPSG:", MS_TRUE) == 0 ) {
