@@ -1824,7 +1824,7 @@ this request. Check wcs/ows_enable_request settings.", "msWCSGetCoverage()", par
     if( crs_to_use == NULL )
       crs_to_use = params->crs;
 
-    if (strncasecmp(crs_to_use, "EPSG:", 5) == 0 || strncasecmp(crs_to_use,"urn:ogc:def:crs:",16) == 0 ) {
+    if (strncasecmp(crs_to_use, "EPSG:", 5) == 0 || strncasecmp(crs_to_use,"urn:ogc:def:crs:",16) == 0 || strncasecmp(crs_to_use, "IAU2000:", 8) == 0 ) {
       if (msLoadProjectionString(&(map->projection), (char *) crs_to_use) != 0)
         return msWCSException( map, NULL, NULL,params->version);
     } else if( strcasecmp(crs_to_use,"imageCRS") == 0 ) {
@@ -1834,7 +1834,7 @@ this request. Check wcs/ows_enable_request settings.", "msWCSGetCoverage()", par
         return MS_FAILURE;
       }
     } else {  /* should we support WMS style AUTO: projections? (not for now) */
-      msSetError(MS_WCSERR, "Unsupported SRS namespace (only EPSG currently supported).", "msWCSGetCoverage()");
+      msSetError(MS_WCSERR, "Unsupported SRS namespace (only EPSG, IAU2000 currently supported).", "msWCSGetCoverage()");
       return msWCSException(map, "InvalidParameterValue", "srs", params->version);
     }
 

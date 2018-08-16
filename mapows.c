@@ -2591,7 +2591,7 @@ char *msOWSGetProjURN(projectionObj *proj, hashTableObj *metadata, const char *n
   msOWSGetEPSGProj( proj, metadata, namespaces,
                          bReturnOnlyFirstOne, &oldStyle );
 
-  if( oldStyle == NULL || strncmp(oldStyle,"EPSG:",5) != 0 )
+  if( oldStyle == NULL || (strncmp(oldStyle,"EPSG:",5) != 0 && strncmp(oldStyle,"IAU2000:",8) != 0))
     return NULL;
 
   result = msStrdup("");
@@ -2603,6 +2603,8 @@ char *msOWSGetProjURN(projectionObj *proj, hashTableObj *metadata, const char *n
 
     if( strncmp(tokens[i],"EPSG:",5) == 0 )
       snprintf( urn, sizeof(urn), "urn:ogc:def:crs:EPSG::%s", tokens[i]+5 );
+    else if(strncmp(tokens[i],"IAU2000:",8) == 0 )
+      snprintf( urn, sizeof(urn), "urn:ogc:def:crs:IAU:2000:%s", tokens[i]+8 );
     else if( strcasecmp(tokens[i],"imageCRS") == 0 )
       snprintf( urn, sizeof(urn), "urn:ogc:def:crs:OGC::imageCRS" );
     else if( strncmp(tokens[i],"urn:ogc:def:crs:",16) == 0 ) {
