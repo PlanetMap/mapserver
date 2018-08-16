@@ -1141,6 +1141,11 @@ static int msWCSDescribeCoverage_CoverageOffering(layerObj *layer, wcsParamsObj 
   msOWSPrintEncodeMetadata(stdout, &(layer->metadata), "CO", "label", OWS_WARN, "  <label>%s</label>\n", NULL);
 
   /* TODO: add elevation ranges to lonLatEnvelope (optional) */
+  /* TODO IAU2000 : Need to find an urn for the CRS of a planet
+    The CRS should be different according to the planet. So I need
+    to put this information in the map file ... maybe 
+    llextent is given by gdal (equivalent to Gdalinfo I guess). That urn must be standardized for each celestial body
+  */
   msIO_printf("    <lonLatEnvelope srsName=\"urn:ogc:def:crs:OGC:1.3:CRS84\">\n");
   msIO_printf("      <gml:pos>%.15g %.15g</gml:pos>\n", cm.llextent.minx, cm.llextent.miny);
   msIO_printf("      <gml:pos>%.15g %.15g</gml:pos>\n", cm.llextent.maxx, cm.llextent.maxy);
@@ -1159,6 +1164,11 @@ static int msWCSDescribeCoverage_CoverageOffering(layerObj *layer, wcsParamsObj 
   msIO_printf("      <spatialDomain>\n");
 
   /* envelope in lat/lon */
+  /* TODO IAU2000: This part should be modified for planets. Here, the code is given for Earth.
+     I know the code for each planet, but I have to find a way to put the right code according to the planet.
+     Maybe, I need to provide the IAU code for the planet in the map file in order to display it here.
+     llextent is given by gdal (equivalent to Gdalinfo I guess). That urn must be standardized for each celestial body
+  */
   msIO_printf("        <gml:Envelope srsName=\"EPSG:4326\">\n");
   msIO_printf("          <gml:pos>%.15g %.15g</gml:pos>\n", cm.llextent.minx, cm.llextent.miny);
   msIO_printf("          <gml:pos>%.15g %.15g</gml:pos>\n", cm.llextent.maxx, cm.llextent.maxy);

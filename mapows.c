@@ -2653,7 +2653,7 @@ char *msOWSGetProjURI(projectionObj *proj, hashTableObj *metadata, const char *n
   msOWSGetEPSGProj( proj, metadata, namespaces,
                          bReturnOnlyFirstOne, &oldStyle);
 
-  if( oldStyle == NULL || !EQUALN(oldStyle,"EPSG:",5) )
+  if( oldStyle == NULL || (!EQUALN(oldStyle,"EPSG:",5) && !EQUALN(oldStyle,"IAU2000:",8)))
     return NULL;
 
   result = msStrdup("");
@@ -2665,6 +2665,8 @@ char *msOWSGetProjURI(projectionObj *proj, hashTableObj *metadata, const char *n
 
     if( strncmp(tokens[i],"EPSG:",5) == 0 )
       snprintf( urn, sizeof(urn), "http://www.opengis.net/def/crs/EPSG/0/%s", tokens[i]+5 );
+    else if( strncmp(tokens[i],"IAU2000:",8) == 0 )
+      snprintf( urn, sizeof(urn), "http://www.iau.org/def/crs/IAU/20000/%s", tokens[i]+8 ); //TODO IAU2000: Should be replaced by a right URL
     else if( strcasecmp(tokens[i],"imageCRS") == 0 )
       snprintf( urn, sizeof(urn), "http://www.opengis.net/def/crs/OGC/0/imageCRS" );
     else if( strncmp(tokens[i],"http://www.opengis.net/def/crs/",16) == 0 )
